@@ -1,0 +1,17 @@
+{
+  "manifest_version":3,
+  "short_name": "RG",
+  "name": "ReviewGuard",
+  "version":"1.0",
+  "description":"Get a real review based on IA tools about MercadoLibre products!",
+  "icons":{
+    "128":"public/logo192.png"
+  },
+  "action":{
+    "default_popup":"public/index.html"
+  },
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
