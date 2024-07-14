@@ -1,0 +1,11 @@
+{
+  "manifest_version":3,
+  "short_name": "RG",
+  "name": "ReviewGuard",
+  "version":"1.0",
+  "description":"Get a real review based on IA tools about MercadoLibre products!",
+  
+  "action":{
+    "default_popup":"index.html"
+  }
+}
