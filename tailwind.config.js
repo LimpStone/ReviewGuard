@@ -18,7 +18,14 @@ module.exports = {
     },
     extend: {
       colors: {
-        primaryYellow: '#F4F41A',
+        softG2:'var(--color-softG2)',
+        softG:'var(--color-softG)',
+        softB:'var(--color-softB)',
+        softW: "var(--color-softW)",
+        themecolor:{
+          DEFAULT:'var(--themecolor)',
+          50: 'var(--theme50)'
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

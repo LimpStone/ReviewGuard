@@ -1,7 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 body {
+    margin:1.5px;
+    background: #5B5F63;   /*210 5% 37% */
     font-family: "Outfit", sans-serif;
     font-optical-sizing: auto;
     font-weight: 300;
@@ -9,23 +12,32 @@ body {
   }
   @layer base {
     :root {
-      --background: 0 0% 100%;
+      --BorderColor:#f2f2f2;
+      --color-softW: #F7F5ED; /* 45 40% 94%*/
+      --color-softG2: #787773;/* 60 2.00% 45.88% */
+      --color-softG: #DEDCD5; /* 39 17% 85% */
+      --color-softB: #383836; /* 60 2% 22% */
+      --color-StarOutLine: #bebebeaa;
+      --color-StarFill:#8f8f8faa;
+      --themecolor: #F4F41A ;
+      --theme50:#e0d03b;
+      --background: 39 17% 85%; /*Front switch bg too*/
       --foreground: 0 0% 3.9%;
 
-      --card: 0 0% 100%;
-      --card-foreground: 0 0% 3.9%;
+      --card: 45 40% 94%;
+      --card-foreground: 60 2% 22%; /*Letras*/
 
       --popover: 0 0% 100%;
       --popover-foreground: 0 0% 3.9%;
 
-      --primary: 0 0% 9%;
-      --primary-foreground: 0 0% 98%;
+      --primary:60 21.568627450980394% 1.8181%; /*long button*/
+      --primary-foreground: 60 21.568627450980394% 1.8181%;
 
       --secondary: 0 0% 96.1%;
       --secondary-foreground: 0 0% 9%;
 
       --muted: 0 0% 96.1%;
-      --muted-foreground: 0 0% 45.1%;
+      --muted-foreground: 60 2% 45.88%;/*Subtitle*/
 
       --accent: 0 0% 96.1%;
       --accent-foreground: 0 0% 9%;
@@ -33,24 +45,32 @@ body {
       --destructive: 0 84.2% 60.2%;
       --destructive-foreground: 0 0% 98%;
 
-      --border: 0 0% 89.8%;
-      --input: 0 0% 89.8%;
+      --border:0 0% 86%;
+      --input: 60 2% 45.88%; /*back switch*/
       --ring: 0 0% 3.9%;
 
-      --radius: 0.5rem;
+      --radius: 0.8rem;
     }
 
     .dark {
-      --background: 0 0% 3.9%;
-      --foreground: 0 0% 98%;
+      --color-StarOutLine:#5f5f5faa;
+      --themecolor:#a10bff;
+      --theme50:#8b35c0;
+      --color-softG: #858483;
+      --color-softW:#383836;
+      --BorderColor:#8f8f8faa;
 
-      --card: 0 0% 3.9%;
-      --card-foreground: 0 0% 98%;
+      
+      --background: 0 0% 50%;
+      --foreground: 45 40% 94%;
+
+      --card: 60 2% 22%;
+      --card-foreground: 0 0% 100%;
 
       --popover: 0 0% 3.9%;
       --popover-foreground: 0 0% 98%;
 
-      --primary: 0 0% 98%;
+      --primary: 45 40% 94%;
       --primary-foreground: 0 0% 9%;
 
       --secondary: 0 0% 14.9%;
@@ -65,8 +85,8 @@ body {
       --destructive: 0 62.8% 30.6%;
       --destructive-foreground: 0 0% 98%;
 
-      --border: 0 0% 14.9%;
-      --input: 0 0% 14.9%;
+      --border: 0 0% 86%;
+      --input: 0 0% 35%;
       --ring: 0 0% 83.1%;
     }
   }

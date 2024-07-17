@@ -5,13 +5,14 @@ import "./App.css";
 import "./Rcomponents/BackgroundCard";
 import { CardDemo } from "./Rcomponents/BackgroundCard";
 //import { Button } from "@/components/ui/button";
+
 function App() {
   return (
     <div>
       <CardDemo 
         SwitchVal={false}
         OnChange1={(val) => console.log(val)} 
-        OnBtnTheme={() => console.log("OnBtnTheme clicked")} 
+        OnBtnTheme={() => document.documentElement.classList.toggle('dark')} 
         OnBtnSpprt={() => console.log("OnBtnSpprt clicked")} 
       />
     </div>

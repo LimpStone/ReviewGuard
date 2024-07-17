@@ -26,16 +26,17 @@ interface CardProps extends React.ComponentProps<typeof Card>{
 
 export function CardDemo({className, ...props }: CardProps) {
   return (
-    <Card className={cn("relative w-[380px]", className)} {...props}>
+    <div className="bg-softG border border-softG br-1 rounded">
+    <Card className={cn("relative w-[380px] border-softG mx-1 my-1", className)} {...props}>
       <div className="FoldEffectBack absolute right-0 z-10"></div>
       <div className="FoldEffect absolute right-0 z-30"></div> 
       <Button className="bg-transparent absolute right-0 z-40 hover:bg-transparent" onClick={props.OnBtnTheme}></Button>
-      <SunIcon color="black" fill="#F4F41A" className="bg-transparent absolute right-0 z-20 pt-1 pr-1" />
+      <SunIcon color="black" fill="var(--themecolor)" className="bg-transparent absolute right-0 z-20 pt-1 pr-1" />
       <CardHeader>
         <CardTitle>
-          <div className=" grid grid-cols-1 sm:grid-cols-3 items-center flex">
-            <div className="pl-1 sm:col-span-2">
-              Review <span className="text-purple-600">Guard</span>{" "}
+          <div className=" grid grid-cols-3 items-center flex">
+            <div className="pl-1 col-span-2">
+              Review <span className="text-themecolor-50">Guard</span>{" "}
               <CardDescription>Trust in real reviews!</CardDescription>
             </div>
             <div className=" flex justify-start"> 
@@ -46,19 +47,20 @@ export function CardDemo({className, ...props }: CardProps) {
       </CardHeader>
       <CardContent className="grid gap-4">
         <div className=" flex justify-center items-center space-x-4 ">
-          <Star color="#bebebeaa" fill="#8f8f8faa" />
-          <Star color="#bebebeaa" fill="#8f8f8faa" />
-          <Star color="#bebebeaa" fill="#8f8f8faa" />
-          <Star color="#bebebeaa" fill="#8f8f8faa" />
-          <Star color="#bebebeaa" fill="#8f8f8faa" />
+          <Star color="var(--color-StarOutLine)" fill="var(--color-StarFill)" />
+          <Star color="var(--color-StarOutLine)" fill="var(--color-StarFill)" />
+          <Star color="var(--color-StarOutLine)" fill="var(--color-StarFill)" />
+          <Star color="var(--color-StarOutLine)" fill="var(--color-StarFill)" />
+          <Star color="var(--color-StarOutLine)" fill="var(--color-StarFill)" />
         </div>
       </CardContent>
       <CardFooter>
         <Button className="w-full" onClick={props.OnBtnSpprt}>
-          <p>Support us</p>
-          <Heart fill="white" className="pl-2 mr-2 h-6 w-6" />
+          <p className="text-softW">Support us </p>
+          <Heart color="var(--color-softW)" fill="var(--color-softW)" className="pl-2 mr-2 h-6 w-6" />
         </Button>
       </CardFooter>
     </Card>
+    </div>
   );
 }
