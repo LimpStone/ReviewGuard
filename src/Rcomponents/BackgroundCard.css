@@ -3,8 +3,11 @@
   border-right: 25px solid transparent;  
   border-bottom: 25px solid var(--BorderColor);
   border-left: 25px solid var(--BorderColor);
-  box-shadow: -2px 2px 0px 0px rgba(0, 0, 0, 0.233);
+  box-shadow: -2px 2px 0.5px 0px rgba(0, 0, 0, 0.233);
   border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 2px;
+  border-top-left-radius: 2px;
+  
 }
 .FoldEffectBack {
   border-top: 25px solid var(--themecolor);
