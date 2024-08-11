@@ -1,4 +1,4 @@
-import { Heart, MoonStar, Star, SunIcon } from "lucide-react";
+import { Heart, MoonStar, Star, StarHalf, SunIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,13 +14,26 @@ import React from "react";
 import "./BackgroundCard.css";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import _ from "lodash";
 
 interface CardProps extends React.ComponentProps<typeof Card> {
+  StarNumber: number | null;
   SwitchVal: boolean;
-  OnChange1: (val: boolean) => void;
-  OnBtnSpprt: () => void;
+  SetSwitchVal: (val: boolean)=>void;
+  isLoading: boolean;
 }
+function processNumber(number:number) {
+  // Obtener la parte entera del número
+  const integerPart = Math.floor(number);
 
+  // Verificar si el número es decimal
+  const isDecimal = number % 1 !== 0;
+
+  return {
+    integerPart,
+    isDecimal,
+  };
+}
 export function CardDemo({ className, ...props }: CardProps) {
   const getInitialTheme = () => {
     const savedTheme = localStorage.getItem("theme");
@@ -33,12 +46,12 @@ export function CardDemo({ className, ...props }: CardProps) {
       return prefersDark ? "dark" : "light";
     }
   };
-  
+
   const [theme, setTheme] = useState(getInitialTheme);
 
-  const getInitialIcon = () =>{
+  const getInitialIcon = () => {
     return theme === "dark" ? false : true;
-  }
+  };
   const [isVisible, setIsVisible] = useState(getInitialIcon); //cost for Animation toggle
 
   useEffect(() => {
@@ -52,8 +65,6 @@ export function CardDemo({ className, ...props }: CardProps) {
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
     setIsVisible((prevAniState) => (prevAniState === true ? false : true));
-    ///() => setIsVisible(!isVisible);
-    console.log(isVisible);
   };
 
   const show = {
@@ -61,10 +72,10 @@ export function CardDemo({ className, ...props }: CardProps) {
     x: 0,
     y: 0,
     transition: {
-      delay: 0.2, 
+      delay: 0.2,
     },
     rotate: [0, 0, -20, 10, 0],
-    Repeat:Infinity
+    Repeat: Infinity,
   };
 
   const hide = {
@@ -72,9 +83,10 @@ export function CardDemo({ className, ...props }: CardProps) {
     x: -19,
     y: 19,
     transition: {
-      delay: 0
+      delay: 0,
     },
   };
+  const result = processNumber(props.StarNumber || 0) 
 
   return (
     <div className="bg-softG border border-softG br-1 rounded">
@@ -90,18 +102,18 @@ export function CardDemo({ className, ...props }: CardProps) {
           onClick={toggleTheme}
         ></Button>
 
-        <motion.div                                               //Sun animation
+        <motion.div //Sun animation
           className="absolute right-0 z-20 pt-1 pr-1"
           animate={isVisible ? show : hide}
         >
           <SunIcon color="black" fill="var(--themecolor)" />
         </motion.div>
 
-        <motion.div                                               //Moon Animation
+        <motion.div //Moon Animation
           className="absolute right-0 z-20 pt-1 pr-1"
           animate={isVisible ? hide : show}
         >
-          <MoonStar color="black" fill="var(--themecolor)" />
+          <MoonStar color="black" fill="var(--moon)" />
         </motion.div>
 
         <CardHeader>
@@ -112,37 +124,45 @@ export function CardDemo({ className, ...props }: CardProps) {
                 <CardDescription>Trust in real reviews!</CardDescription>
               </div>
               <div className=" flex justify-start">
-                <Switch className="items-center" checked={props.SwitchVal} />
+                <Switch className="items-center" checked={props.SwitchVal} onCheckedChange={props.SetSwitchVal}/>
               </div>
             </div>
           </CardTitle>
         </CardHeader>
-        <CardContent className="grid gap-4">
+        <CardContent className="grid gap-4">    
+             
           <div className=" flex justify-center items-center space-x-4 ">
-            <Star
-              color="var(--color-StarOutLine)"
-              fill="var(--color-StarFill)"
-            />
-            <Star
-              color="var(--color-StarOutLine)"
-              fill="var(--color-StarFill)"
-            />
-            <Star
-              color="var(--color-StarOutLine)"
-              fill="var(--color-StarFill)"
-            />
-            <Star
-              color="var(--color-StarOutLine)"
-              fill="var(--color-StarFill)"
-            />
-            <Star
-              color="var(--color-StarOutLine)"
-              fill="var(--color-StarFill)"
-            />
+            {_.range(0, result.integerPart).map(() => {           
+              return <Star
+                  color="var(--theme50)"
+                  fill="var(--themecolor)"
+                />
+            })}
+            {_.range(result.integerPart,5).map((num) => {           
+              return result.isDecimal === true && num===result.integerPart ? (
+                <div className="icon-container flex">
+                <StarHalf             
+                  color="var(--theme50)"
+                  fill="var(--themecolor)"  
+                  className="absolute"              
+                />  
+                <StarHalf
+                  color="var(--color-StarOutLine)"
+                  fill="var(--color-StarFill)"
+                  className="scale-x-[-1] inline-block"
+                />
+                </div>
+              ):(
+                <Star
+                  color="var(--color-StarOutLine)"
+                  fill="var(--color-StarFill)"
+                />
+              );
+            })}
           </div>
         </CardContent>
         <CardFooter>
-          <Button className="w-full" onClick={props.OnBtnSpprt}>
+          <Button className="w-full" /*onClick={props.OnBtnSpprt}*/>
             <p className="text-softW">Support us </p>
             <Heart
               color="var(--color-softW)"

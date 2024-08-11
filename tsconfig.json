@@ -2,6 +2,7 @@
   "files": [],
   "compilerOptions": {
     // ...
+    "typeRoots": ["./node_modules/@types", "./src/globals.d.ts"],
     "baseUrl": ".",
     "paths": {
       "@/*": [

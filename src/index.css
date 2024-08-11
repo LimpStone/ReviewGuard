@@ -48,7 +48,7 @@ body {
       --border:0 0% 86%;
       --input: 60 2% 45.88%; /*back switch*/
       --ring: 0 0% 3.9%;
-
+      --moon:#f1dbff;
       --radius: 0.8rem;
     }
 
@@ -56,10 +56,10 @@ body {
       --color-StarOutLine:#5f5f5faa;
       --themecolor:#a10bff;
       --theme50:#8b35c0;
+      --moon:#f1dbff;
       --color-softG: #858483;
       --color-softW:#383836;
       --BorderColor:#868686;
-
       
       --background: 0 0% 50%;
       --foreground: 45 40% 94%;
