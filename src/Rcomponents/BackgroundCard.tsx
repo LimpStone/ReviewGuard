@@ -9,25 +9,32 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
 import React from "react";
 import "./BackgroundCard.css";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import _ from "lodash";
+import { Fswitch } from "@/components/ui/Fswitch";
 
 interface CardProps extends React.ComponentProps<typeof Card> {
   StarNumber: number | null;
   SwitchVal: boolean;
-  SetSwitchVal: (val: boolean)=>void;
-  isLoading: boolean;
+  SetSwitchVal: (val: boolean) => void;
 }
-function processNumber(number:number) {
-  // Obtener la parte entera del número
-  const integerPart = Math.floor(number);
+function processNumber(number: number) {
+  // Obtain the integer part
+  let integerPart = Math.floor(number);
 
-  // Verificar si el número es decimal
-  const isDecimal = number % 1 !== 0;
+  // Verify if is decimal
+  let isDecimal = number % 1 !== 0;
+
+  //Round to closest integer due to the 5 stars
+  if (number % 1 <= 0.2) {
+    isDecimal = false;
+  } else if (number % 1 >= 0.8) {
+    isDecimal = false;
+    integerPart++;
+  }
 
   return {
     integerPart,
@@ -86,8 +93,9 @@ export function CardDemo({ className, ...props }: CardProps) {
       delay: 0,
     },
   };
-  const result = processNumber(props.StarNumber || 0) 
 
+  
+  const result = processNumber(props.StarNumber || 0);
   return (
     <div className="bg-softG border border-softG br-1 rounded">
       <Card
@@ -123,36 +131,52 @@ export function CardDemo({ className, ...props }: CardProps) {
                 Review <span className="text-themecolor-50">Guard</span>{" "}
                 <CardDescription>Trust in real reviews!</CardDescription>
               </div>
-              <div className=" flex justify-start">
-                <Switch className="items-center" checked={props.SwitchVal} onCheckedChange={props.SetSwitchVal}/>
+              <div className=" flex justify-start">             
+                <Fswitch
+                 checked={props.SwitchVal}
+                 onCheckedChange={props.SetSwitchVal}/>
               </div>
             </div>
           </CardTitle>
         </CardHeader>
-        <CardContent className="grid gap-4">    
-             
+        <CardContent className="grid gap-4">
           <div className=" flex justify-center items-center space-x-4 ">
-            {_.range(0, result.integerPart).map(() => {           
-              return <Star
-                  color="var(--theme50)"
-                  fill="var(--themecolor)"
-                />
+            {_.range(0, result.integerPart).map(() => {
+              return <Star color="var(--theme50)" fill="var(--themecolor)" />;
             })}
-            {_.range(result.integerPart,5).map((num) => {           
-              return result.isDecimal === true && num===result.integerPart ? (
+            {_.range(result.integerPart, 5).map((num) => {
+              return result.isDecimal && num === result.integerPart ? (
                 <div className="icon-container flex">
-                <StarHalf             
-                  color="var(--theme50)"
-                  fill="var(--themecolor)"  
-                  className="absolute"              
-                />  
-                <StarHalf
-                  color="var(--color-StarOutLine)"
-                  fill="var(--color-StarFill)"
-                  className="scale-x-[-1] inline-block"
-                />
+                  <StarHalf
+                    color="var(--theme50)"
+                    fill="var(--themecolor)"
+                    className="absolute"
+                  />
+                  <StarHalf
+                    color="var(--color-StarOutLine)"
+                    fill="var(--color-StarFill)"
+                    className="scale-x-[-1] inline-block"
+                  />
                 </div>
-              ):(
+              ) : props.SwitchVal && !props.StarNumber ? (
+                <motion.div
+                  key={num}
+                  initial={{ y: 0 }}
+                  animate={{ y: [0, -10, 0] }} // Movimiento de arriba a abajo
+                  transition={{
+                    duration: 0.5, // Duración de la animación
+                    delay: num * 0.1, // Retraso para crear el efecto de onda
+                    repeat: Infinity, // Repetir indefinidamente
+                    repeatType: "mirror", // Repetir en modo espejo para un movimiento suave
+                    repeatDelay: 0.8,
+                  }}
+                >
+                  <Star
+                    color="var(--color-StarOutLine)"
+                    fill="var(--color-StarFill)"
+                  />
+                </motion.div>
+              ) : (
                 <Star
                   color="var(--color-StarOutLine)"
                   fill="var(--color-StarFill)"
@@ -162,7 +186,15 @@ export function CardDemo({ className, ...props }: CardProps) {
           </div>
         </CardContent>
         <CardFooter>
-          <Button className="w-full" /*onClick={props.OnBtnSpprt}*/>
+          <Button
+            className="w-full"
+            onClick={() =>
+              window.open(
+                "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
+                "_blank"
+              )
+            }
+          >
             <p className="text-softW">Support us </p>
             <Heart
               color="var(--color-softW)"

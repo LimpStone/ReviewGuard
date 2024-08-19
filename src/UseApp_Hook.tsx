@@ -26,37 +26,52 @@ const use = () => {
   const [flags, setflags] = useState({
     isLoading: false,
   });
-  const [randomNumber, SetRandomN] = useState<number | null>(null); //Stars
+  const [StarValue, SetStarValue] = useState<number | null>(null); //Stars
   const [SwitchVal, SetSwitchVal] = useState(false); //Switch
-  const [comments, setComments] = useState<Comment[] | null>(null);
-  const [objectId, setObjectId] = useState("MLM"); // id
+  const [objectId, setObjectId] = useState(""); // id
 
   // const [comments, setComments] = useState([]);
 
   /** @Functions */
 
-  async function getSentiment(comment: Comment,session:any) {                 //Function to call the gemini nano built in AI 
-   
+  async function getSentiment(comment: Comment) {
+    //Function to call the gemini nano built AI
+    const session = await window.ai.createTextSession(); // Method to initialize the gemini nano session
+    if (comment.text === "" || comment.text === " ") {
+      return 0;
+    }
     // Prompt the model and stream the result:
-    const stream = await session.promptStreaming(
+    const stream = await session.prompt(
       "Based on the feeling of the next comment: " +
         comment.text +
-        "(Just Need a Number not text) rate it from 0 to 5 (can use decimals) and be strict"
+        "(Just Need a Number not text using a format like this 4.5) rate it from 0 to 5 (can use decimals)"
     );
-    console.log("-> "+stream)
-    return parseFloat(stream);
+    const match = stream.match(/^\s*(\d+(\.\d+)?)/); //Regex to get only the number due to dumb AI
+    console.log("-> " + match[0] + " value of : " + comment.text);
+    session.destroy();
+    return parseFloat(match[0]);
   }
 
-  async function AvgSentiment(comments: Comment[]) {
-    const session = await window.ai.createTextSession(); // Method to initialize the gemini nano sesion
-    const sentimentPromises = comments.map((comment) => getSentiment(comment,session));
-    const sentiments = await Promise.all(sentimentPromises);
-    const totalSentiment = sentiments.reduce(
+  async function AvgSentiment(comments: Comment[], limit: number) {
+    const results: number[] = [];
+    async function processComment(comment: Comment) {
+      const sentiment = await getSentiment(comment);
+      results.push(sentiment);
+    }
+    const chunks = Array.from(
+      { length: Math.ceil(comments.length / limit) },
+      (_, i) => comments.slice(i * limit, i * limit + limit)
+    );
+    for (const chunk of chunks) {
+      await Promise.all(chunk.map(processComment));
+    }
+    const totalSentiment = results.reduce(
       (acc, sentiment) => acc + sentiment,
       0
     );
-    const averageSentiment = totalSentiment / sentiments.length;
-    SetRandomN(averageSentiment);
+    const averageSentiment = totalSentiment / results.length;
+    console.log(`Average Sentiment: ${averageSentiment}`);
+    SetStarValue(averageSentiment);
   }
 
   const updateFlags = (newFlags: Partial<typeof flags>) => {
@@ -67,16 +82,28 @@ const use = () => {
   };
 
   async function fetchReviews(objectId: string): Promise<Comment[] | null> {
-    const endpoint = `https://articulo.mercadolibre.com.mx/noindex/catalog/reviews/MLM3091600092/search?objectId=${objectId}&siteId=MLM&isItem=true&offset=0&limit=30&x-is-webview=false`;
+    const endpoint = `https://articulo.mercadolibre.com.mx/noindex/catalog/reviews/${objectId}/search?objectId=${objectId}&siteId=MLM&isItem=true&offset=0&limit=30&x-is-webview=false`;
+    const endpoint2 = `https://www.mercadolibre.com.mx/noindex/catalog/reviews/${objectId}/search?objectId=${objectId}&siteId=MLM&isItem=false&order=dateCreated&limit=30&x-is-webview=false`;
+    console.log("--> " + endpoint, endpoint2);
     try {
       const response = await fetch(endpoint);
+      const response2 = await fetch(endpoint2);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
+      if (!response2.ok) {
+        throw new Error(`HTTP error! status: ${response2.status}`);
+      }
       const data = await response.json();
-      const comments: Comment[] = data.reviews.map((review: any) => ({
+      let comments: Comment[] = data.reviews.map((review: any) => ({
         text: review.comment.content.text,
       }));
+      if (comments.length === 0) {
+        const data = await response2.json();
+        comments = data.reviews.map((review: any) => ({
+          text: review.comment.content.text,
+        }));
+      }
       return comments;
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -88,18 +115,16 @@ const use = () => {
 
   useEffect(() => {
     const fetchAndSetComments = async () => {
-      const fetchedComments = await fetchReviews(objectId);
-      setComments(fetchedComments);
+      const fetchedComments = await fetchReviews(objectId);   
+      if (fetchedComments) {
+        AvgSentiment(fetchedComments, 3);
+      }
+      console.log("fetched");
     };
 
-    if (objectId) {
+    if (objectId !== "") {
+      console.log("fetching");
       fetchAndSetComments();
-      if (comments) {
-        comments.forEach((c) => {
-          console.log(c.text);
-        });
-        AvgSentiment(comments);
-      }
     }
   }, [objectId]);
 
@@ -113,13 +138,14 @@ const use = () => {
         if (chrome.runtime.lastError) {
           console.error(chrome.runtime.lastError);
         } else {
-          console.log(response, "Cositas happend");
+          console.log(response, "Object ID recived");
           setObjectId(response?.ID || "");
         }
       }
     ); //Effect to send switch val to the background scripts
   }, [SwitchVal]);
   //Server Prot
+  /*
   useEffect(() => {
     const fetchRandomNumber = async () => {
       try {
@@ -137,13 +163,13 @@ const use = () => {
     if (!SwitchVal) {
       SetRandomN(null);
     }
-  }, [SwitchVal]);
+  }, [SwitchVal]);/*
 
   /** @Constants */
 
   return {
     flags,
-    localData: { SwitchVal, randomNumber, objectId },
+    localData: { SwitchVal, StarValue },
     methods: {
       updateFlags,
       SetSwitchVal,

@@ -7,14 +7,16 @@
   "action":{
     "default_popup":"index.html"
   },
+  "icons": {
+    "128": "icon128.png"
+  },
   "permissions": [
     "tabs",
     "activeTab",
     "scripting"
   ],
   "host_permissions":[
-    "http://*/*",
-    "https://*/*"
+    "https://www.mercadolibre.com.mx/*"
   ],
   "background": {
     "service_worker": "background.js",
