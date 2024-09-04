@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 const use = () => {
   /** @Globals */
+  
 
   interface Comment {
     text: string;
@@ -35,8 +36,9 @@ const use = () => {
   /** @Functions */
 
   async function getSentiment(comment: Comment) {
-    //Function to call the gemini nano built AI
-    const session = await window.ai.createTextSession(); // Method to initialize the gemini nano session
+    //Function to call the gemini nano built AI// Method to initialize the gemini nano session (new one, google pls stop)
+    const session = await ai.assistant.create();
+
     if (comment.text === "" || comment.text === " ") {
       return 0;
     }
@@ -47,9 +49,12 @@ const use = () => {
         "(Just Need a Number not text using a format like this 4.5) rate it from 0 to 5 (can use decimals)"
     );
     const match = stream.match(/^\s*(\d+(\.\d+)?)/); //Regex to get only the number due to dumb AI
-    console.log("-> " + match[0] + " value of : " + comment.text);
+    if(match?.[0]){
+      console.log("-> " + match[0] + " value of : " + comment.text);
+    }
     session.destroy();
-    return parseFloat(match[0]);
+    
+    return match?.[0] ? parseFloat(match?.[0]) : 0.1111;
   }
 
   async function AvgSentiment(comments: Comment[], limit: number) {

@@ -1,5 +1,6 @@
-interface Window {
-    ai: {
-        createTextSession: any;
+interface Ai { // Augmentation
+    assistant: {
+        create: any;
     };
   }
+  var ai: Ai;

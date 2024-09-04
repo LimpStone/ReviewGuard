@@ -141,7 +141,7 @@ export function CardDemo({ className, ...props }: CardProps) {
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className=" flex justify-center items-center space-x-4 ">
-            {_.range(0, result.integerPart).map(() => {
+            {_.range(0, result.integerPart).map(() => {   // for loop with the stars in gray 
               return <Star color="var(--theme50)" fill="var(--themecolor)" />;
             })}
             {_.range(result.integerPart, 5).map((num) => {
@@ -162,12 +162,12 @@ export function CardDemo({ className, ...props }: CardProps) {
                 <motion.div
                   key={num}
                   initial={{ y: 0 }}
-                  animate={{ y: [0, -10, 0] }} // Movimiento de arriba a abajo
+                  animate={{ y: [0, -10, 0] }} // Up-Down movement
                   transition={{
-                    duration: 0.5, // Duración de la animación
-                    delay: num * 0.1, // Retraso para crear el efecto de onda
-                    repeat: Infinity, // Repetir indefinidamente
-                    repeatType: "mirror", // Repetir en modo espejo para un movimiento suave
+                    duration: 0.5, 
+                    delay: num * 0.1, // delay to start animation
+                    repeat: Infinity, 
+                    repeatType: "mirror", 
                     repeatDelay: 0.8,
                   }}
                 >
@@ -176,7 +176,7 @@ export function CardDemo({ className, ...props }: CardProps) {
                     fill="var(--color-StarFill)"
                   />
                 </motion.div>
-              ) : (
+              ) : (   // last stars (grey ones) not animated
                 <Star
                   color="var(--color-StarOutLine)"
                   fill="var(--color-StarFill)"
