@@ -1,4 +1,4 @@
-<h2 style="color: red;">⚠ WARNING: API under development and susceptible to major changes ⚠</h2>
+<h2 style="color: red;">⚠ WARNING: API under development and susceptible to major changes</h2>
 
 ![warning](https://img.shields.io/badge/Warning-API%20in%20development-red)
 
